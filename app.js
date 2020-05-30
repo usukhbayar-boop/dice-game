@@ -68,7 +68,7 @@ document.querySelector(".btn-hold").addEventListener("click", function () {
 
     // toglogchiin eeljiig solino
 
-    if (scores[activePlayer] >= 20) {
+    if (scores[activePlayer] >= 100) {
       isNewGame = false;
       document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
       document
