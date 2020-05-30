@@ -1,3 +1,6 @@
+// Togloomiin tuluviig shalgah huvisagch
+var isNewGame;
+
 // Тоглогчийн ээлжийг хадгалах хувьсагч, нэгдүгээр тоглогчийг 0, хоёрдугаар тоглогчийг 1 гэж тэмдэглэе.
 var activePlayer;
 // Тоглогчдын цуглуулсан оноог хадгалах хувьсагч
@@ -10,6 +13,7 @@ var diceDOM = document.querySelector(".dice");
 initGame();
 
 function initGame() {
+  isNewGame = true;
   activePlayer = 0;
   scores = [0, 0];
   roundScore = 0;
@@ -35,38 +39,49 @@ function initGame() {
 }
 
 document.querySelector(".btn-roll").addEventListener("click", function () {
-  var diceNumber = Math.floor(Math.random() * 6 + 1);
-  diceDOM.style.display = "block";
-  diceDOM.src = "dice-" + diceNumber + ".png";
-  // Hervee buusan too 1ees yalgaatai bol eeljiin onoog nemegduulne
-  if (diceNumber !== 1) {
-    roundScore = roundScore + diceNumber;
-    document.getElementById("current-" + activePlayer).textContent = roundScore;
+  if (isNewGame) {
+    var diceNumber = Math.floor(Math.random() * 6 + 1);
+    diceDOM.style.display = "block";
+    diceDOM.src = "dice-" + diceNumber + ".png";
+    // Hervee buusan too 1ees yalgaatai bol eeljiin onoog nemegduulne
+    if (diceNumber !== 1) {
+      roundScore = roundScore + diceNumber;
+      document.getElementById(
+        "current-" + activePlayer
+      ).textContent = roundScore;
+    } else {
+      // herev negtei tentsuu bol eeljiin onoog 0 bolgoj daraagiin toglogchiin eeljind shiljuulne
+      switchToNextPlayer();
+    }
   } else {
-    // herev negtei tentsuu bol eeljiin onoog 0 bolgoj daraagiin toglogchiin eeljind shiljuulne
-    switchToNextPlayer();
+    alert("NEW GAME товчийг дарж тоглоомыг шинээр эхлүүлнэ үү!");
   }
 });
 // HOLD tovchiig darj eeljiin onoog golbal onoon deer nemne
 document.querySelector(".btn-hold").addEventListener("click", function () {
-  // eeljiin onoog global onoon deer nemne
-  scores[activePlayer] = scores[activePlayer] + roundScore;
-  //delgets deer onoog oorchilno
-  document.getElementById("score-" + activePlayer).textContent =
-    scores[activePlayer];
+  if (isNewGame) {
+    // eeljiin onoog global onoon deer nemne
+    scores[activePlayer] = scores[activePlayer] + roundScore;
+    //delgets deer onoog oorchilno
+    document.getElementById("score-" + activePlayer).textContent =
+      scores[activePlayer];
 
-  // toglogchiin eeljiig solino
+    // toglogchiin eeljiig solino
 
-  if (scores[activePlayer] >= 20) {
-    document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.add("winner");
-    document
-      .querySelector(".player-" + activePlayer + "-panel")
-      .classList.remove("active");
+    if (scores[activePlayer] >= 20) {
+      isNewGame = false;
+      document.getElementById("name-" + activePlayer).textContent = "WINNER!!!";
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.add("winner");
+      document
+        .querySelector(".player-" + activePlayer + "-panel")
+        .classList.remove("active");
+    } else {
+      switchToNextPlayer();
+    }
   } else {
-    switchToNextPlayer();
+    alert("NEW GAME товчийг дарж тоглоомыг шинээр эхлүүлнэ үү!");
   }
 });
 
